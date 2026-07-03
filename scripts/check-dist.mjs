@@ -10,8 +10,12 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("..", import.meta.url).pathname;
+// fileURLToPath (not `.pathname`) so a checkout path containing spaces or other
+// characters that percent-encode in a URL resolves to the correct filesystem
+// path — `.pathname` would leave them escaped and break the script.
+const root = fileURLToPath(new URL("..", import.meta.url));
 const committedDist = join(root, "dist");
 
 function listFiles(dir) {
