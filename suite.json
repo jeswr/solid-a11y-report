@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jeswr/full-solid-ecosystem/main/tracking/schema/suite.schema.json",
+  "id": "solid-a11y-report",
+  "kind": "sdk",
+  "name": "Solid A11y Report (EARL)",
+  "repo": "https://github.com/jeswr/solid-a11y-report",
+  "category": "infrastructure",
+  "maturity": "alpha",
+  "visibility": "public",
+  "stack": {
+    "lang": "TypeScript (ESM, NodeNext)",
+    "runtime": "Node >=20",
+    "rdf": "n3 ^2.x",
+    "rdf-wrapper": "@rdfjs/wrapper ^0.34.x",
+    "fetch-rdf": "@jeswr/fetch-rdf ^0.1",
+    "shacl": "rdf-validate-shacl ^0.6, @zazuko/env-node ^3 (dev)",
+    "test": "vitest ^4.x",
+    "lint": "@biomejs/biome ^2.x",
+    "node": ">=20"
+  },
+  "dependsOn": [],
+  "federation": {
+    "sectors": [],
+    "produces": [],
+    "consumes": [],
+    "note": "The typed EARL (Evaluation And Report Language) RDF data-model for accessibility test results. Turns an axe-shaped scan (framework-neutral, e.g. AccessRadar's ScanResult) into W3C EARL 1.0 + ACT Rules Format 1.1 assertions — one earl:Assertion per (rule x page x failing node x WCAG success criterion), with earl:TestRequirement WCAG-SC IRIs (WCAG 2.0/2.1/2.2 TR anchors), earl:TestCase axe-rule docs, ptr:CSSSelectorPointer selectors, and earl:automatic mode. Reuses standard vocabulary only (earl:, ptr:, dcterms:, schema:, prov:) — MINTS NOTHING. Typed @rdfjs/wrapper accessors build the graph, n3.Writer serialises it, @jeswr/fetch-rdf parses it back; a SHACL shape pins the assertion contract; an owner-private WAC ACL helper keeps a report pod-private by default. GitHub-installable now (committed dist/, ignore-scripts=true); npm publish is a deferred migration."
+  },
+  "status": {
+    "generatedAt": "2026-07-03T00:00:00.000Z",
+    "commit": "",
+    "version": "0.1.0",
+    "gate": {
+      "lint": "skip",
+      "typecheck": "skip",
+      "test": "skip",
+      "build": "skip"
+    }
+  }
+}
