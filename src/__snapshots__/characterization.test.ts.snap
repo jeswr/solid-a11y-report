@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`emitted RDF golden master > buildReport emits the pinned canonical triples 1`] = `
+"<https://alice.example/a11y/scan-1.ttl#assertion-0-result> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestResult> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0-result> <http://www.w3.org/ns/earl#info> "Element has no alt attribute" .
+<https://alice.example/a11y/scan-1.ttl#assertion-0-result> <http://www.w3.org/ns/earl#outcome> <http://www.w3.org/ns/earl#failed> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0-result> <http://www.w3.org/ns/earl#pointer> _:ptr1 .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://purl.org/dc/terms/references> <https://dequeuniversity.com/rules/axe/4.9/image-alt> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Assertion> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/ns/earl#assertedBy> <https://alice.example/a11y/scan-1.ttl#assertor> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/ns/earl#mode> <http://www.w3.org/ns/earl#automatic> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/ns/earl#result> <https://alice.example/a11y/scan-1.ttl#assertion-0-result> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/ns/earl#subject> <https://site.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertion-0> <http://www.w3.org/ns/earl#test> <https://www.w3.org/TR/WCAG22/#non-text-content> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1-result> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestResult> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1-result> <http://www.w3.org/ns/earl#info> "Element has an empty alt attribute" .
+<https://alice.example/a11y/scan-1.ttl#assertion-1-result> <http://www.w3.org/ns/earl#outcome> <http://www.w3.org/ns/earl#failed> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1-result> <http://www.w3.org/ns/earl#pointer> _:ptr2 .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://purl.org/dc/terms/references> <https://dequeuniversity.com/rules/axe/4.9/image-alt> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Assertion> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/ns/earl#assertedBy> <https://alice.example/a11y/scan-1.ttl#assertor> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/ns/earl#mode> <http://www.w3.org/ns/earl#automatic> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/ns/earl#result> <https://alice.example/a11y/scan-1.ttl#assertion-1-result> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/ns/earl#subject> <https://site.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertion-1> <http://www.w3.org/ns/earl#test> <https://www.w3.org/TR/WCAG22/#non-text-content> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2-result> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestResult> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2-result> <http://www.w3.org/ns/earl#outcome> <http://www.w3.org/ns/earl#failed> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2-result> <http://www.w3.org/ns/earl#pointer> _:ptr0 .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://purl.org/dc/terms/references> <https://dequeuniversity.com/rules/axe/4.9/region> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Assertion> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/ns/earl#assertedBy> <https://alice.example/a11y/scan-1.ttl#assertor> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/ns/earl#mode> <http://www.w3.org/ns/earl#automatic> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/ns/earl#result> <https://alice.example/a11y/scan-1.ttl#assertion-2-result> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/ns/earl#subject> <https://site.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertion-2> <http://www.w3.org/ns/earl#test> <https://dequeuniversity.com/rules/axe/4.9/region> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3-result> <http://schema.org/value> "12"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3-result> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestResult> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3-result> <http://www.w3.org/ns/earl#outcome> <http://www.w3.org/ns/earl#passed> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Assertion> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/ns/earl#assertedBy> <https://alice.example/a11y/scan-1.ttl#assertor> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/ns/earl#mode> <http://www.w3.org/ns/earl#automatic> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/ns/earl#result> <https://alice.example/a11y/scan-1.ttl#assertion-3-result> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/ns/earl#subject> <https://site.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertion-3> <http://www.w3.org/ns/earl#test> <https://alice.example/a11y/scan-1.ttl#automated-checks> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4-result> <http://schema.org/value> "2"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4-result> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestResult> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4-result> <http://www.w3.org/ns/earl#outcome> <http://www.w3.org/ns/earl#inapplicable> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Assertion> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/ns/earl#assertedBy> <https://alice.example/a11y/scan-1.ttl#assertor> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/ns/earl#mode> <http://www.w3.org/ns/earl#automatic> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/ns/earl#result> <https://alice.example/a11y/scan-1.ttl#assertion-4-result> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/ns/earl#subject> <https://site.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertion-4> <http://www.w3.org/ns/earl#test> <https://alice.example/a11y/scan-1.ttl#automated-checks> .
+<https://alice.example/a11y/scan-1.ttl#assertor> <http://purl.org/dc/terms/hasVersion> "4.9.1" .
+<https://alice.example/a11y/scan-1.ttl#assertor> <http://purl.org/dc/terms/title> "AccessRadar" .
+<https://alice.example/a11y/scan-1.ttl#assertor> <http://schema.org/url> <https://accessradar.example/> .
+<https://alice.example/a11y/scan-1.ttl#assertor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#Software> .
+<https://alice.example/a11y/scan-1.ttl#automated-checks> <http://purl.org/dc/terms/title> "Automated accessibility checks" .
+<https://alice.example/a11y/scan-1.ttl#automated-checks> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestCase> .
+<https://dequeuniversity.com/rules/axe/4.9/image-alt> <http://purl.org/dc/terms/description> "Images must have alternate text" .
+<https://dequeuniversity.com/rules/axe/4.9/image-alt> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestCase> .
+<https://dequeuniversity.com/rules/axe/4.9/region> <http://purl.org/dc/terms/description> "All content should be in a landmark" .
+<https://dequeuniversity.com/rules/axe/4.9/region> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestCase> .
+<https://site.example/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestSubject> .
+<https://www.w3.org/TR/WCAG22/#non-text-content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/earl#TestRequirement> .
+_:ptr0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2009/pointers#CSSSelectorPointer> .
+_:ptr0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "div.orphan" .
+_:ptr1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2009/pointers#CSSSelectorPointer> .
+_:ptr1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "img.hero" .
+_:ptr2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2009/pointers#CSSSelectorPointer> .
+_:ptr2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "img.logo" ."
+`;
