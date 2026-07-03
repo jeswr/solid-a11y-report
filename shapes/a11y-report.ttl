@@ -1,0 +1,61 @@
+# SHACL shape for the EARL accessibility-report model (@jeswr/solid-a11y-report).
+#
+# The contract an `earl:Assertion` (and its `earl:TestResult`) must satisfy so a
+# report this package writes reads identically through any EARL/ACT consumer.
+# Authored against reused, dereferenceable IRIs only — W3C EARL 1.0 (`earl:`) and
+# the outcome/mode individuals it defines — so this package MINTS NOTHING.
+#
+# The shapes are ANONYMOUS (blank nodes), so nothing is minted at a non-resolving
+# domain. Validate a built report graph before write, and on read of untrusted
+# data (rdf-validate-shacl; see src/shape.test.ts).
+
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+
+# --- An EARL assertion (earl:Assertion) --------------------------------------
+# Every assertion pins exactly one subject, test, result, assertor and mode.
+[] a sh:NodeShape ;
+  sh:targetClass earl:Assertion ;
+
+  # earl:subject — the tested page, an IRI, exactly one.
+  sh:property [
+    sh:path earl:subject ; sh:name "subject" ;
+    sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+
+  # earl:test — the criterion (a WCAG SC requirement, or the axe rule TestCase),
+  # an IRI, exactly one. Fanning out per (rule x page x node x SC) keeps this 1:1.
+  sh:property [
+    sh:path earl:test ; sh:name "test" ;
+    sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+
+  # earl:result — the result node, exactly one (a blank node or an IRI).
+  sh:property [
+    sh:path earl:result ; sh:name "result" ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+
+  # earl:assertedBy — the assertor, exactly one.
+  sh:property [
+    sh:path earl:assertedBy ; sh:name "assertedBy" ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+  ] ;
+
+  # earl:mode — exactly one, from the five EARL test-mode individuals.
+  sh:property [
+    sh:path earl:mode ; sh:name "mode" ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+    sh:in ( earl:automatic earl:manual earl:semiAuto earl:undisclosed earl:unknownMode ) ;
+  ] .
+
+# --- An EARL test result (earl:TestResult) -----------------------------------
+# Exactly one outcome, from the five EARL outcome individuals.
+[] a sh:NodeShape ;
+  sh:targetClass earl:TestResult ;
+
+  sh:property [
+    sh:path earl:outcome ; sh:name "outcome" ;
+    sh:minCount 1 ; sh:maxCount 1 ;
+    sh:in ( earl:passed earl:failed earl:cantTell earl:inapplicable earl:untested ) ;
+  ] .
