@@ -30,19 +30,31 @@ describe("wcagCriterionUri", () => {
     expect(wcagCriterionUri({ version: "2.1", name: "Contrast (Minimum)" })).toBe(
       "https://www.w3.org/TR/WCAG21/#contrast-minimum",
     );
-    expect(wcagCriterionUri({ version: "2.0", name: "Info and Relationships" })).toBe(
-      "https://www.w3.org/TR/WCAG20/#info-and-relationships",
-    );
+    // WCAG 2.0 requires the legacy anchor (see the 2.0-specific test below).
+    expect(
+      wcagCriterionUri({ version: "2.0", name: "Non-text Content", anchor: "text-equiv-all" }),
+    ).toBe("https://www.w3.org/TR/WCAG20/#text-equiv-all");
   });
 
   it("the version drives the document — same name, different version, different URI", () => {
     const name = "Non-text Content";
-    expect(wcagCriterionUri({ version: "2.0", name })).toBe(
-      "https://www.w3.org/TR/WCAG20/#non-text-content",
+    expect(wcagCriterionUri({ version: "2.1", name })).toBe(
+      "https://www.w3.org/TR/WCAG21/#non-text-content",
     );
     expect(wcagCriterionUri({ version: "2.2", name })).toBe(
       "https://www.w3.org/TR/WCAG22/#non-text-content",
     );
+  });
+
+  it("WCAG 2.0 requires an explicit anchor (legacy mnemonics are not slug-derivable)", () => {
+    // A name-only 2.0 ref is fail-closed (slugify would emit a broken IRI).
+    expect(() => wcagCriterionUri({ version: "2.0", name: "Non-text Content" })).toThrow(
+      /WCAG 2\.0 uses legacy TR anchors/,
+    );
+    // With the legacy anchor it builds the correct 2.0 IRI.
+    expect(
+      wcagCriterionUri({ version: "2.0", name: "Non-text Content", anchor: "text-equiv-all" }),
+    ).toBe("https://www.w3.org/TR/WCAG20/#text-equiv-all");
   });
 
   it("an explicit anchor overrides slugify(name) (future-anchor as a data change)", () => {

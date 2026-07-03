@@ -97,8 +97,13 @@ wcagVersionFromAxeTag("wcag21aa"); // "2.1"
 ```
 
 The WCAG version is always a parameter (2.0 → `WCAG20`, 2.1 → `WCAG21`,
-2.2 → `WCAG22`); pass an explicit `anchor` to override the derived slug so a
-future/renamed anchor is a data change.
+2.2 → `WCAG22`). For **2.1/2.2** the anchor defaults to the kebab-cased SC name
+(which those RECs use). **WCAG 2.0 requires an explicit `anchor`** — its TR
+anchors are legacy mnemonics (e.g. "Non-text Content" is `#text-equiv-all`, not
+`#non-text-content`) that can't be derived from the name; pass the legacy anchor,
+or reference the criterion under WCAG 2.1/2.2. In `buildReport`, a 2.0 reference
+without an anchor is dropped (the assertion falls back to the axe rule doc as its
+`earl:test`) rather than emitting a broken IRI.
 
 ### Owner-private ACL
 

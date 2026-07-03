@@ -35,9 +35,12 @@ export interface WcagRef {
   /** Conformance level, e.g. "A" / "AA" / "AAA" (informational). */
   level?: "A" | "AA" | "AAA";
   /**
-   * Explicit TR anchor override (kebab-case fragment WITHOUT the leading `#`),
-   * e.g. `"non-text-content"`. When absent, the anchor is {@link slugify}`(name)`.
-   * Overriding lets a future WCAG version (or a renamed anchor) be a data change.
+   * Explicit TR anchor (fragment WITHOUT the leading `#`), e.g.
+   * `"non-text-content"` (2.1/2.2) or `"text-equiv-all"` (2.0). When absent, the
+   * anchor is {@link slugify}`(name)` for versions 2.1/2.2. **REQUIRED for WCAG
+   * 2.0** — its anchors are legacy mnemonics not derivable from the SC name (see
+   * {@link wcagCriterionUri}). An explicit anchor also future-proofs a later WCAG
+   * version whose anchoring differs.
    */
   anchor?: string;
 }
@@ -57,14 +60,25 @@ export function slugify(name: string): string {
 
 /**
  * The canonical W3C TR anchor IRI for a WCAG success criterion:
- * `https://www.w3.org/TR/WCAG{20|21|22}/#{anchor}`. The `anchor` defaults to
- * {@link slugify}`(name)`; pass an explicit `anchor` to override it (so a
- * renamed/future anchor is a data change, not a code change).
+ * `https://www.w3.org/TR/WCAG{20|21|22}/#{anchor}`.
  *
- * @throws if `version` is not a supported WCAG version, or if neither an
- *   explicit `anchor` nor a `slugify(name)` yields a non-empty fragment
- *   (fail-closed — a criterion IRI with an empty fragment is meaningless and
- *   would collide across criteria).
+ * For **WCAG 2.1 and 2.2** the anchor defaults to {@link slugify}`(name)` —
+ * those RECs anchor each success criterion at the kebab-cased SC name (e.g.
+ * "Non-text Content" → `#non-text-content`, "Contrast (Minimum)" →
+ * `#contrast-minimum`), which slugify reproduces exactly.
+ *
+ * For **WCAG 2.0** an explicit `anchor` is REQUIRED (fail-closed): the WCAG 2.0
+ * REC anchors criteria at LEGACY mnemonic ids (e.g. "Non-text Content" is
+ * `#text-equiv-all`, NOT `#non-text-content`) that cannot be derived from the SC
+ * name, so slugifying it would emit a broken IRI. Pass the legacy `anchor`, or —
+ * preferably — reference the criterion under WCAG 2.1/2.2 (a superset), whose
+ * anchors ARE derivable. Passing an explicit `anchor` also future-proofs a later
+ * WCAG version whose anchoring differs.
+ *
+ * @throws if `version` is not a supported WCAG version; if `version` is "2.0" and
+ *   no explicit `anchor` is given; or if neither an explicit `anchor` nor a
+ *   `slugify(name)` yields a non-empty fragment (fail-closed — a criterion IRI
+ *   with an empty fragment is meaningless and would collide across criteria).
  */
 export function wcagCriterionUri(ref: WcagRef): string {
   const segment = VERSION_SEGMENT[ref.version];
@@ -75,7 +89,16 @@ export function wcagCriterionUri(ref: WcagRef): string {
     );
   }
   const explicit = ref.anchor?.trim();
-  const anchor = explicit && explicit.length > 0 ? explicit : slugify(ref.name);
+  const hasExplicit = explicit !== undefined && explicit.length > 0;
+  if (ref.version === "2.0" && !hasExplicit) {
+    throw new Error(
+      "wcagCriterionUri: WCAG 2.0 uses legacy TR anchors (e.g. #text-equiv-all for " +
+        `'Non-text Content'), which cannot be derived from the SC name ${JSON.stringify(ref.name)} ` +
+        "— pass an explicit `anchor` for a 2.0 reference, or reference the criterion under " +
+        "WCAG 2.1/2.2 (whose anchors are the kebab-cased SC name).",
+    );
+  }
+  const anchor = hasExplicit ? explicit : slugify(ref.name);
   if (!anchor) {
     throw new Error(
       `wcagCriterionUri: empty anchor — neither an explicit anchor nor slugify(name=${JSON.stringify(

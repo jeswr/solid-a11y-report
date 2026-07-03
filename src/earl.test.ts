@@ -152,6 +152,55 @@ describe("buildReport / round-trip", () => {
     expect(assertions).toHaveLength(8);
   });
 
+  it("a WCAG 2.0 rule WITHOUT a legacy anchor falls back to the axe helpUrl TestCase", async () => {
+    // 2.0 anchors aren't slug-derivable → wcagCriterionUri throws → the SC is
+    // dropped and the rule doc becomes the earl:test (fail-closed, no broken IRI).
+    const parsed = parseReport(
+      buildReport(BASE, {
+        toolName: "AccessRadar",
+        pages: [
+          {
+            url: "https://site.example/",
+            issues: [
+              {
+                ruleId: "image-alt",
+                helpUrl: "https://dequeuniversity.com/rules/axe/4.9/image-alt",
+                wcag: [{ version: "2.0", name: "Non-text Content" }],
+                nodes: [{ selector: "img" }],
+              },
+            ],
+          },
+        ],
+      }),
+    );
+    expect(parsed.assertions).toHaveLength(1);
+    expect(parsed.assertions[0]?.test).toBe("https://dequeuniversity.com/rules/axe/4.9/image-alt");
+  });
+
+  it("a WCAG 2.0 rule WITH a legacy anchor references the 2.0 SC IRI", async () => {
+    const parsed = parseReport(
+      buildReport(BASE, {
+        toolName: "AccessRadar",
+        pages: [
+          {
+            url: "https://site.example/",
+            issues: [
+              {
+                ruleId: "image-alt",
+                helpUrl: "https://dequeuniversity.com/rules/axe/4.9/image-alt",
+                wcag: [{ version: "2.0", name: "Non-text Content", anchor: "text-equiv-all" }],
+                nodes: [{ selector: "img" }],
+              },
+            ],
+          },
+        ],
+      }),
+    );
+    expect(parsed.assertions.map((a) => a.test)).toContain(
+      "https://www.w3.org/TR/WCAG20/#text-equiv-all",
+    );
+  });
+
   it("emits per-page roll-ups for passed / inapplicable counts", async () => {
     const parsed = parseReport(buildReport(BASE, FIXTURE));
     const passed = parsed.assertions.find((a) => a.outcome === "passed");
