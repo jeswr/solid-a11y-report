@@ -357,14 +357,16 @@ export class TestResult extends RdfNode {
 // @public
 export function wcagCriterionUri(ref: WcagRef): string;
 
+// Warning: (ae-forgotten-export) The symbol "WcagRefFields" needs to be exported by the entry point index.d.ts
+//
 // @public
-export interface WcagRef {
+export type WcagRef = (WcagRefFields & {
+    version: "2.1" | "2.2";
     anchor?: string;
-    id?: string;
-    level?: "A" | "AA" | "AAA";
-    name: string;
-    version: WcagVersion;
-}
+}) | (WcagRefFields & {
+    version: "2.0";
+    anchor: string;
+});
 
 // @public
 export type WcagVersion = "2.0" | "2.1" | "2.2";

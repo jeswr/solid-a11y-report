@@ -1,6 +1,6 @@
 // AUTHORED-BY Claude Opus 4.8 (Fable unavailable) — re-review/upgrade candidate.
 import { describe, expect, it } from "vitest";
-import { slugify, type WcagVersion, wcagCriterionUri, wcagVersionFromAxeTag } from "./wcag.js";
+import { slugify, type WcagRef, wcagCriterionUri, wcagVersionFromAxeTag } from "./wcag.js";
 
 describe("slugify", () => {
   it("lowercases and kebab-cases an SC name", () => {
@@ -47,10 +47,11 @@ describe("wcagCriterionUri", () => {
   });
 
   it("WCAG 2.0 requires an explicit anchor (legacy mnemonics are not slug-derivable)", () => {
-    // A name-only 2.0 ref is fail-closed (slugify would emit a broken IRI).
-    expect(() => wcagCriterionUri({ version: "2.0", name: "Non-text Content" })).toThrow(
-      /WCAG 2\.0 uses legacy TR anchors/,
-    );
+    // A name-only 2.0 ref is a COMPILE error (the discriminated union requires
+    // `anchor`); the cast simulates an untyped / JS caller reaching the runtime
+    // guard, which is fail-closed (slugify would emit a broken IRI).
+    const untyped20 = { version: "2.0", name: "Non-text Content" } as unknown as WcagRef;
+    expect(() => wcagCriterionUri(untyped20)).toThrow(/WCAG 2\.0 uses legacy TR anchors/);
     // With the legacy anchor it builds the correct 2.0 IRI.
     expect(
       wcagCriterionUri({ version: "2.0", name: "Non-text Content", anchor: "text-equiv-all" }),
@@ -72,9 +73,8 @@ describe("wcagCriterionUri", () => {
   });
 
   it("throws on an unsupported version", () => {
-    expect(() => wcagCriterionUri({ version: "9.9" as unknown as WcagVersion, name: "X" })).toThrow(
-      /unsupported WCAG version/,
-    );
+    const badVersion = { version: "9.9", name: "X" } as unknown as WcagRef;
+    expect(() => wcagCriterionUri(badVersion)).toThrow(/unsupported WCAG version/);
   });
 
   it("throws (fail-closed) when neither anchor nor slugify(name) yields a fragment", () => {

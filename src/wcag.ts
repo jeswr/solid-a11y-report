@@ -24,26 +24,38 @@ const VERSION_SEGMENT: Record<WcagVersion, string> = {
   "2.2": "22",
 };
 
-/** A reference to a WCAG success criterion, as carried on an axe rule. */
-export interface WcagRef {
-  /** The WCAG version this reference is against — determines the TR document. */
-  version: WcagVersion;
+/** Fields common to every WCAG success-criterion reference. */
+interface WcagRefFields {
   /** Human-readable SC name, e.g. "Non-text Content" (used to derive the anchor). */
   name: string;
   /** Dotted SC number, e.g. "1.1.1" (informational; not used to build the IRI). */
   id?: string;
   /** Conformance level, e.g. "A" / "AA" / "AAA" (informational). */
   level?: "A" | "AA" | "AAA";
-  /**
-   * Explicit TR anchor (fragment WITHOUT the leading `#`), e.g.
-   * `"non-text-content"` (2.1/2.2) or `"text-equiv-all"` (2.0). When absent, the
-   * anchor is {@link slugify}`(name)` for versions 2.1/2.2. **REQUIRED for WCAG
-   * 2.0** — its anchors are legacy mnemonics not derivable from the SC name (see
-   * {@link wcagCriterionUri}). An explicit anchor also future-proofs a later WCAG
-   * version whose anchoring differs.
-   */
-  anchor?: string;
 }
+
+/**
+ * A reference to a WCAG success criterion, as carried on an axe rule.
+ *
+ * A **discriminated union on `version`**, so the 2.0-anchor contract is enforced
+ * at COMPILE time as well as at runtime: for **2.1/2.2** the `anchor` is optional
+ * (it defaults to {@link slugify}`(name)`, which those RECs use); for **2.0** the
+ * `anchor` is REQUIRED — its TR anchors are legacy mnemonics not derivable from
+ * the SC name (e.g. "Non-text Content" is `text-equiv-all`; see
+ * {@link wcagCriterionUri}). An explicit `anchor` also future-proofs a later
+ * WCAG version whose anchoring differs.
+ */
+export type WcagRef =
+  | (WcagRefFields & {
+      version: "2.1" | "2.2";
+      /** Explicit TR anchor (fragment without the leading `#`); defaults to `slugify(name)`. */
+      anchor?: string;
+    })
+  | (WcagRefFields & {
+      version: "2.0";
+      /** Explicit legacy TR anchor (fragment without the leading `#`) — REQUIRED for 2.0. */
+      anchor: string;
+    });
 
 /**
  * Kebab-case slug for a WCAG SC name — lowercase, every run of non-`[a-z0-9]`

@@ -9,6 +9,7 @@ import {
   serializeReport,
 } from "./earl.js";
 import { EARL_ASSERTION, EARL_TEST_REQUIREMENT, RDF_TYPE } from "./vocab.js";
+import type { WcagRef } from "./wcag.js";
 
 const BASE = "https://alice.example/a11y/scan-1.ttl";
 
@@ -155,6 +156,9 @@ describe("buildReport / round-trip", () => {
   it("a WCAG 2.0 rule WITHOUT a legacy anchor falls back to the axe helpUrl TestCase", async () => {
     // 2.0 anchors aren't slug-derivable → wcagCriterionUri throws → the SC is
     // dropped and the rule doc becomes the earl:test (fail-closed, no broken IRI).
+    // A 2.0-without-anchor ref is a COMPILE error (the discriminated union); the
+    // cast simulates an untyped / foreign scan input reaching buildReport.
+    const untyped20Wcag = [{ version: "2.0", name: "Non-text Content" }] as unknown as WcagRef[];
     const parsed = parseReport(
       buildReport(BASE, {
         toolName: "AccessRadar",
@@ -165,7 +169,7 @@ describe("buildReport / round-trip", () => {
               {
                 ruleId: "image-alt",
                 helpUrl: "https://dequeuniversity.com/rules/axe/4.9/image-alt",
-                wcag: [{ version: "2.0", name: "Non-text Content" }],
+                wcag: untyped20Wcag,
                 nodes: [{ selector: "img" }],
               },
             ],
