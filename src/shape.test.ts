@@ -106,6 +106,37 @@ describe("SHACL shape (shapes/a11y-report.ttl)", () => {
     expect(report.results.some((r) => String(r.path?.value).endsWith("outcome"))).toBe(true);
   });
 
+  it("an assertion whose earl:result is a LITERAL is non-conforming (nodeKind/class)", async () => {
+    const ttl = `
+      @prefix earl: <http://www.w3.org/ns/earl#> .
+      <#a> a earl:Assertion ;
+        earl:subject <https://site.example/> ;
+        earl:test <https://www.w3.org/TR/WCAG22/#non-text-content> ;
+        earl:assertedBy <${BASE}#assertor> ;
+        earl:mode earl:automatic ;
+        earl:result "not a result node" .
+    `;
+    const report = await validateTtl(ttl);
+    expect(report.conforms).toBe(false);
+    expect(report.results.some((r) => String(r.path?.value).endsWith("result"))).toBe(true);
+  });
+
+  it("an assertion whose earl:result is not typed earl:TestResult is non-conforming (sh:class)", async () => {
+    const ttl = `
+      @prefix earl: <http://www.w3.org/ns/earl#> .
+      <#a> a earl:Assertion ;
+        earl:subject <https://site.example/> ;
+        earl:test <https://www.w3.org/TR/WCAG22/#non-text-content> ;
+        earl:assertedBy <${BASE}#assertor> ;
+        earl:mode earl:automatic ;
+        earl:result <#r> .
+      <#r> earl:outcome earl:failed .
+    `;
+    const report = await validateTtl(ttl);
+    expect(report.conforms).toBe(false);
+    expect(report.results.some((r) => String(r.path?.value).endsWith("result"))).toBe(true);
+  });
+
   it("an assertion with an unknown earl:mode is non-conforming (sh:in)", async () => {
     const ttl = `
       @prefix earl: <http://www.w3.org/ns/earl#> .

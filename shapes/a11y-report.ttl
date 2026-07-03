@@ -30,10 +30,17 @@
     sh:nodeKind sh:IRI ; sh:minCount 1 ; sh:maxCount 1 ;
   ] ;
 
-  # earl:result — the result node, exactly one (a blank node or an IRI).
+  # earl:result — exactly one result node (a blank node or an IRI) that is typed
+  # earl:TestResult. Constraining the node kind + class here (not just cardinality)
+  # means a literal or untyped result is REJECTED at the assertion, and ties the
+  # node to the earl:TestResult shape below so its earl:outcome is validated too —
+  # otherwise a malformed result would pass the assertion shape and only silently
+  # drop on read.
   sh:property [
     sh:path earl:result ; sh:name "result" ;
     sh:minCount 1 ; sh:maxCount 1 ;
+    sh:nodeKind sh:BlankNodeOrIRI ;
+    sh:class earl:TestResult ;
   ] ;
 
   # earl:assertedBy — the assertor, exactly one.

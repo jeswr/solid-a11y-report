@@ -255,6 +255,28 @@ describe("untrusted-input hardening", () => {
   it("throws (fail-closed) on a non-http(s) reportBaseUrl", () => {
     expect(() => buildReport("urn:x:y", { toolName: "t", pages: [] })).toThrow(/http/);
   });
+
+  it("skips a roll-up whose count is not a safe non-negative integer (no invalid xsd:integer)", async () => {
+    for (const bad of [-3, 1.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+      const parsed = parseReport(
+        buildReport(BASE, {
+          toolName: "AccessRadar",
+          pages: [{ url: "https://site.example/", passes: bad, inapplicable: bad, issues: [] }],
+        }),
+      );
+      // No failing issues + no valid counts → no assertions at all.
+      expect(parsed.assertions).toHaveLength(0);
+    }
+    // A valid count still emits (and 0 is a legitimate count).
+    const ok = parseReport(
+      buildReport(BASE, {
+        toolName: "AccessRadar",
+        pages: [{ url: "https://site.example/", passes: 0, inapplicable: 7, issues: [] }],
+      }),
+    );
+    expect(ok.assertions.map((a) => a.outcome).sort()).toEqual(["inapplicable", "passed"]);
+    expect(ok.assertions.find((a) => a.outcome === "passed")?.value).toBe(0);
+  });
 });
 
 describe("parse tolerance", () => {

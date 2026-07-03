@@ -219,6 +219,16 @@ function tryRead<T>(fn: () => T): T | undefined {
   }
 }
 
+/**
+ * A safe non-negative integer count — the guard for a roll-up `schema:value`.
+ * `LiteralFrom.integer` serialises whatever number it is given as `xsd:integer`,
+ * so a `NaN` / `Infinity` / decimal / negative count would produce invalid or
+ * nonsensical RDF; such a count is skipped rather than emitted.
+ */
+function isCount(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
 // --- Typed node wrappers ------------------------------------------------------
 
 /** Base wrapper: a live `rdf:type` set, read/written through the vetted mappers. */
@@ -592,10 +602,8 @@ export function buildReport(reportBaseUrl: string, input: A11yScanInput): Store 
       }
     }
 
-    if (typeof page.passes === "number") emitRollup(subjectIri, EARL_PASSED, page.passes);
-    if (typeof page.inapplicable === "number") {
-      emitRollup(subjectIri, EARL_INAPPLICABLE, page.inapplicable);
-    }
+    if (isCount(page.passes)) emitRollup(subjectIri, EARL_PASSED, page.passes);
+    if (isCount(page.inapplicable)) emitRollup(subjectIri, EARL_INAPPLICABLE, page.inapplicable);
   }
 
   return store;
