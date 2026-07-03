@@ -36,6 +36,18 @@ import type {
 } from "./earl.js";
 import * as earlEntry from "./earl.js";
 import { buildReport } from "./earl.js";
+import type {
+  A11yAssertionData as RootA11yAssertionData,
+  A11yIssueInput as RootA11yIssueInput,
+  A11yMode as RootA11yMode,
+  A11yNodeInput as RootA11yNodeInput,
+  A11yOutcome as RootA11yOutcome,
+  A11yPageInput as RootA11yPageInput,
+  A11yReportData as RootA11yReportData,
+  A11yScanInput as RootA11yScanInput,
+  WcagRef as RootWcagRef,
+  WcagVersion as RootWcagVersion,
+} from "./index.js";
 import * as mainEntry from "./index.js";
 import * as shapeEntry from "./shape.js";
 import { RDF_VALUE, XSD } from "./vocab.js";
@@ -61,6 +73,36 @@ const _report: A11yReportData = { assertions: [] };
 const _wcagRef: WcagRef = { version: "2.2", name: "Non-text Content" };
 const _wcagVersion: WcagVersion = "2.1";
 void [_scan, _page, _issue, _node, _outcome, _mode, _assertion, _report, _wcagRef, _wcagVersion];
+
+// The ROOT entry (`.`) re-exports these types too — pin them from `./index.js`
+// (aliased) so removing/renaming a type-only export FROM THE ROOT BARREL also
+// breaks `tsc`, not just a subpath change.
+const _rootScan: RootA11yScanInput = { toolName: "t", pages: [] };
+const _rootPage: RootA11yPageInput = { url: "https://x/", issues: [] };
+const _rootIssue: RootA11yIssueInput = { ruleId: "r", wcag: [], nodes: [] };
+const _rootNode: RootA11yNodeInput = { selector: "img" };
+const _rootOutcome: RootA11yOutcome = "failed";
+const _rootMode: RootA11yMode = "automatic";
+const _rootAssertion: RootA11yAssertionData = {
+  subject: "https://x/",
+  test: "https://y/",
+  outcome: "failed",
+};
+const _rootReport: RootA11yReportData = { assertions: [] };
+const _rootWcagRef: RootWcagRef = { version: "2.2", name: "Non-text Content" };
+const _rootWcagVersion: RootWcagVersion = "2.0";
+void [
+  _rootScan,
+  _rootPage,
+  _rootIssue,
+  _rootNode,
+  _rootOutcome,
+  _rootMode,
+  _rootAssertion,
+  _rootReport,
+  _rootWcagRef,
+  _rootWcagVersion,
+];
 
 // --- 1. Public-API contract ----------------------------------------------------
 
