@@ -24,16 +24,6 @@ const VERSION_SEGMENT: Record<WcagVersion, string> = {
   "2.2": "22",
 };
 
-/** Fields common to every WCAG success-criterion reference. */
-interface WcagRefFields {
-  /** Human-readable SC name, e.g. "Non-text Content" (used to derive the anchor). */
-  name: string;
-  /** Dotted SC number, e.g. "1.1.1" (informational; not used to build the IRI). */
-  id?: string;
-  /** Conformance level, e.g. "A" / "AA" / "AAA" (informational). */
-  level?: "A" | "AA" | "AAA";
-}
-
 /**
  * A reference to a WCAG success criterion, as carried on an axe rule.
  *
@@ -44,18 +34,36 @@ interface WcagRefFields {
  * the SC name (e.g. "Non-text Content" is `text-equiv-all`; see
  * {@link wcagCriterionUri}). An explicit `anchor` also future-proofs a later
  * WCAG version whose anchoring differs.
+ *
+ * The common fields (`name`/`id`/`level`) are inlined into each branch rather
+ * than factored into a shared helper type, so `WcagRef` depends on no non-exported
+ * symbol (no api-extractor `ae-forgotten-export` leak on the public surface).
  */
 export type WcagRef =
-  | (WcagRefFields & {
+  | {
+      /** The WCAG version — determines the TR document and the anchor rules. */
       version: "2.1" | "2.2";
+      /** Human-readable SC name, e.g. "Non-text Content" (used to derive the anchor). */
+      name: string;
+      /** Dotted SC number, e.g. "1.1.1" (informational; not used to build the IRI). */
+      id?: string;
+      /** Conformance level, e.g. "A" / "AA" / "AAA" (informational). */
+      level?: "A" | "AA" | "AAA";
       /** Explicit TR anchor (fragment without the leading `#`); defaults to `slugify(name)`. */
       anchor?: string;
-    })
-  | (WcagRefFields & {
+    }
+  | {
+      /** The WCAG version — 2.0, whose legacy anchors require an explicit `anchor`. */
       version: "2.0";
+      /** Human-readable SC name, e.g. "Non-text Content". */
+      name: string;
+      /** Dotted SC number, e.g. "1.1.1" (informational; not used to build the IRI). */
+      id?: string;
+      /** Conformance level, e.g. "A" / "AA" / "AAA" (informational). */
+      level?: "A" | "AA" | "AAA";
       /** Explicit legacy TR anchor (fragment without the leading `#`) — REQUIRED for 2.0. */
       anchor: string;
-    });
+    };
 
 /**
  * Kebab-case slug for a WCAG SC name — lowercase, every run of non-`[a-z0-9]`
